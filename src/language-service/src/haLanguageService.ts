@@ -9,10 +9,10 @@ import {
   Position,
   Range,
   SymbolInformation,
-  TextDocument,
   TextEdit,
   CompletionItemKind,
 } from "vscode-languageserver-protocol";
+import { TextDocument } from "vscode-languageserver-textdocument";
 import { getLineOffsets } from "yaml-language-server/out/server/src/languageservice/utils/arrUtils";
 import {
   LanguageService,
@@ -956,7 +956,7 @@ export class HomeAssistantLanguageService {
       // If validation fails (e.g., HA not connected), silently skip
       console.log("Device validation skipped:", error);
     }
-    
+
     return diagnostics;
   };
 
@@ -1798,7 +1798,7 @@ export class HomeAssistantLanguageService {
       // If validation fails (e.g., HA not connected), silently skip
       console.log("Action validation skipped:", error);
     }
-    
+
     return diagnostics;
   };
 

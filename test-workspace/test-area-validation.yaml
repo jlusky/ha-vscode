@@ -15,6 +15,21 @@ automation:
       - service: light.turn_off
         target:
           area_id: non_existing_area  # Invalid area
+
+  - alias: Template Test
+    action:
+      - service: light.turn_on
+        target:
+          area_id: "{{ area_registry.living_room }}"  # Template, should be skipped
+      - service: light.turn_on
+        target:
+          area_id: !secret my_area  # Secret, should be skipped
+      - service: light.turn_on
+        target:
+          area_id: all  # Special value, should be skipped
+      - service: light.turn_on
+        target:
+          area_id: none  # Special value, should be skipped
           
 # Test with array syntax
 script:
@@ -31,20 +46,3 @@ group:
   test_group:
     target:
       area_id: [living_room, non_existing_area]  # One valid, one invalid
-
-# Test with template and special values
-automation:
-  - alias: Template Test
-    action:
-      - service: light.turn_on
-        target:
-          area_id: "{{ area_registry.living_room }}"  # Template, should be skipped
-      - service: light.turn_on
-        target:
-          area_id: !secret my_area  # Secret, should be skipped
-      - service: light.turn_on
-        target:
-          area_id: all  # Special value, should be skipped
-      - service: light.turn_on
-        target:
-          area_id: none  # Special value, should be skipped

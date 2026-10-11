@@ -16,6 +16,18 @@ import {
 } from "home-assistant-js-websocket";
 import { IConfigurationService } from "../configuration";
 import { createSocket } from "./socket";
+import {
+  DEV_MOCK_AREAS,
+  DEV_MOCK_DEVICES,
+  DEV_MOCK_ENTITIES,
+  DEV_MOCK_FLOORS,
+  DEV_MOCK_LABELS,
+  DEV_MOCK_SERVICES,
+  getDevMockDomainCompletions,
+  getDevMockEntityCompletions,
+  getDevMockHassDevices,
+  getDevMockServiceCompletions,
+} from "./devMockHaData";
 
 export interface HassArea {
   area_id: string;
@@ -154,6 +166,7 @@ export class HaConnection implements IHaConnection {
     token?: string;
     url?: string;
     ignoreCertificates?: boolean;
+    devMockConnection?: boolean;
   } = {};
 
   // Event callbacks for connection status
@@ -167,6 +180,22 @@ export class HaConnection implements IHaConnection {
 
   public tryConnect = async (): Promise<void> => {
     try {
+      if (this.configurationService.devMockConnection) {
+        console.log("Dev mock connection mode enabled - using static test registries");
+        this.lastSuccessfulConfig = {
+          token: this.configurationService.token,
+          url: this.configurationService.url,
+          ignoreCertificates: this.configurationService.ignoreCertificates,
+          devMockConnection: true,
+        };
+        if (this.onConnectionEstablished) {
+          this.onConnectionEstablished({
+            name: "Dev Mock HA",
+            version: "dev-mock",
+          });
+        }
+        return;
+      }
       await this.createConnection();
     } catch (error) {
       console.error("Failed to create initial connection:", error);
@@ -180,6 +209,12 @@ export class HaConnection implements IHaConnection {
     console.log(`Configuration status: ${this.configurationService.isConfigured ? "Configured" : "Not Configured"}`);
     console.log(`URL configured: ${this.configurationService.url ? "Yes" : "No"}`);
     console.log(`Token available: ${this.configurationService.token ? "Yes" : "No"}`);
+    console.log(`Dev mock connection: ${this.configurationService.devMockConnection ? "Yes" : "No"}`);
+
+    if (this.configurationService.devMockConnection) {
+      await this.tryConnect();
+      return;
+    }
     
     if (!this.configurationService.isConfigured) {
       console.log("Home Assistant is not configured, aborting connection attempt");
@@ -410,13 +445,22 @@ export class HaConnection implements IHaConnection {
 
   public notifyConfigUpdate = async (): Promise<void> => {
     console.log("Configuration update detected, checking if reconnection is needed...");
+
+    if (this.configurationService.devMockConnection) {
+      console.log("Dev mock connection mode active after config update");
+      await this.tryConnect();
+      return;
+    }
     
     // Check if the token or URL has changed since last successful connection
     const tokenChanged = this.lastSuccessfulConfig.token !== this.configurationService.token;
     const urlChanged = this.lastSuccessfulConfig.url !== this.configurationService.url;
     const certSettingChanged = this.lastSuccessfulConfig.ignoreCertificates !== this.configurationService.ignoreCertificates;
+    const mockSettingChanged =
+      this.lastSuccessfulConfig.devMockConnection !==
+      this.configurationService.devMockConnection;
     
-    if (!tokenChanged && !urlChanged && !certSettingChanged) {
+    if (!tokenChanged && !urlChanged && !certSettingChanged && !mockSettingChanged) {
       console.log("No relevant configuration changes detected, skipping reconnection");
       return;
     }
@@ -535,6 +579,10 @@ export class HaConnection implements IHaConnection {
   };
 
   public async getAreaCompletions(): Promise<CompletionItem[]> {
+    if (this.configurationService.devMockConnection) {
+      return DEV_MOCK_AREAS;
+    }
+
     const areas = await this.getHassAreas();
 
     if (!areas) {
@@ -599,6 +647,10 @@ export class HaConnection implements IHaConnection {
   };
 
   public async getFloorCompletions(): Promise<CompletionItem[]> {
+    if (this.configurationService.devMockConnection) {
+      return DEV_MOCK_FLOORS;
+    }
+
     const floors = await this.getHassFloors();
 
     if (!floors) {
@@ -656,10 +708,17 @@ export class HaConnection implements IHaConnection {
   };
 
   public async getHassDevices(): Promise<HassDevices> {
+    if (this.configurationService.devMockConnection) {
+      return getDevMockHassDevices();
+    }
     return this.getHassDevicesInternal();
   }
 
   public async getDeviceCompletions(): Promise<CompletionItem[]> {
+    if (this.configurationService.devMockConnection) {
+      return DEV_MOCK_DEVICES;
+    }
+
     const devices = await this.getHassDevices();
 
     if (!devices) {
@@ -706,6 +765,10 @@ export class HaConnection implements IHaConnection {
   }
 
   public async getHassEntities(): Promise<HassEntities> {
+    if (this.configurationService.devMockConnection) {
+      return DEV_MOCK_ENTITIES;
+    }
+
     // If we have a cached value, return it immediately
     // This is updated in real-time by the subscription callback
     if (this.currentEntitiesCache !== undefined) {
@@ -796,6 +859,9 @@ export class HaConnection implements IHaConnection {
   };
 
   public async getHassEntityRegistry(): Promise<HassEntityRegistry> {
+    if (this.configurationService.devMockConnection) {
+      return {};
+    }
     return this.getHassEntityRegistryInternal();
   }
 
@@ -830,6 +896,10 @@ export class HaConnection implements IHaConnection {
   };
 
   public async getLabelCompletions(): Promise<CompletionItem[]> {
+    if (this.configurationService.devMockConnection) {
+      return DEV_MOCK_LABELS;
+    }
+
     const labels = await this.getHassLabels();
 
     if (!labels) {
@@ -940,6 +1010,10 @@ export class HaConnection implements IHaConnection {
   }
 
   public async getEntityCompletions(): Promise<CompletionItem[]> {
+    if (this.configurationService.devMockConnection) {
+      return getDevMockEntityCompletions();
+    }
+
     const entities = await this.getHassEntities();
 
     if (!entities) {
@@ -1122,6 +1196,10 @@ export class HaConnection implements IHaConnection {
   }
 
   public async getDomainCompletions(): Promise<CompletionItem[]> {
+    if (this.configurationService.devMockConnection) {
+      return getDevMockDomainCompletions();
+    }
+
     const entities = await this.getHassEntities();
     let domains = [];
 
@@ -1146,6 +1224,10 @@ export class HaConnection implements IHaConnection {
   }
 
   public async getHassServices(): Promise<HassServices> {
+    if (this.configurationService.devMockConnection) {
+      return DEV_MOCK_SERVICES;
+    }
+
     // If we have a cached value, return it immediately
     // This is updated in real-time by the subscription callback
     if (this.currentServicesCache !== undefined) {
@@ -1192,6 +1274,10 @@ export class HaConnection implements IHaConnection {
   };
 
   public async getServiceCompletions(): Promise<CompletionItem[]> {
+    if (this.configurationService.devMockConnection) {
+      return getDevMockServiceCompletions();
+    }
+
     const services = await this.getHassServices();
 
     if (!services) {
@@ -1273,6 +1359,24 @@ export class HaConnection implements IHaConnection {
     api: string,
     requestBody?: any,
   ): Promise<any> => {
+    if (this.configurationService.devMockConnection) {
+      console.log(`Dev mock callApi ${method.toUpperCase()} ${api}`);
+      if (api === "config" || api === "config/core/check_config") {
+        return {
+          location_name: "Dev Mock HA",
+          version: "dev-mock",
+          result: "valid",
+        };
+      }
+      if (api === "template") {
+        return `(dev-mock template) ${requestBody?.template ?? ""}`;
+      }
+      if (api === "error_log") {
+        return "Dev mock mode: no error log available.\n";
+      }
+      return { result: "ok", mock: true };
+    }
+
     try {
       const resp = await axios.request({
         method,
@@ -1322,6 +1426,14 @@ export class HaConnection implements IHaConnection {
 
     serviceData: any,
   ): Promise<any> => {
+    if (this.configurationService.devMockConnection) {
+      console.log(
+        `Dev mock callService ${domain}.${service}`,
+        serviceData ?? {},
+      );
+      return [];
+    }
+
     try {
       const resp = await axios.request({
         method: "POST",

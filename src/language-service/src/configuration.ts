@@ -8,6 +8,8 @@ export interface IConfigurationService {
   ignoreCertificates: boolean;
   disableAutomaticFileAssociation: boolean;
   autoRenderTemplates: boolean;
+  /** Use static mock HA registries for local Extension Host testing. */
+  devMockConnection: boolean;
   updateConfiguration(config: DidChangeConfigurationParams): void;
 }
 
@@ -17,6 +19,7 @@ export interface HomeAssistantConfiguration {
   ignoreCertificates: boolean;
   disableAutomaticFileAssociation: boolean;
   autoRenderTemplates: boolean;
+  devMockConnection?: boolean;
 }
 
 export class ConfigurationService implements IConfigurationService {
@@ -32,10 +35,12 @@ export class ConfigurationService implements IConfigurationService {
 
   public autoRenderTemplates = true;
 
+  public devMockConnection = false;
+
   constructor() {
     this.setConfigViaEnvironmentVariables();
 
-    this.isConfigured = `${this.url}` !== "";
+    this.refreshConfigured();
   }
 
   public updateConfiguration = (config: DidChangeConfigurationParams): void => {
@@ -47,6 +52,7 @@ export class ConfigurationService implements IConfigurationService {
     const prevIgnoreCertificates = this.ignoreCertificates;
     const prevDisableAutomaticFileAssociation = this.disableAutomaticFileAssociation;
     const prevAutoRenderTemplates = this.autoRenderTemplates;
+    const prevDevMockConnection = this.devMockConnection;
 
     // Get the Home Assistant configuration section
     const incoming = config.settings[
@@ -73,13 +79,16 @@ export class ConfigurationService implements IConfigurationService {
       this.ignoreCertificates = !!incoming.ignoreCertificates;
       this.disableAutomaticFileAssociation = !!incoming.disableAutomaticFileAssociation;
       this.autoRenderTemplates = incoming.autoRenderTemplates !== undefined ? !!incoming.autoRenderTemplates : true;
+      if (incoming.devMockConnection !== undefined) {
+        this.devMockConnection = !!incoming.devMockConnection;
+      }
     } else {
       console.warn("Received invalid or empty configuration object");
     }
 
     this.setConfigViaEnvironmentVariables();
 
-    this.isConfigured = `${this.url}` !== "" && !!this.token;
+    this.refreshConfigured();
     
     // Log changes for debugging
     if (this.token !== prevToken) {
@@ -108,18 +117,35 @@ export class ConfigurationService implements IConfigurationService {
       console.log(`Auto render templates setting changed: ${prevAutoRenderTemplates} -> ${this.autoRenderTemplates}`);
     }
 
+    if (this.devMockConnection !== prevDevMockConnection) {
+      console.log(`Dev mock connection setting changed: ${prevDevMockConnection} -> ${this.devMockConnection}`);
+    }
+
     console.log(`Configuration status after update: ${this.isConfigured ? "Configured" : "Not Configured"}`);
   };
+
+  private refreshConfigured(): void {
+    this.isConfigured =
+      this.devMockConnection || (`${this.url}` !== "" && !!this.token);
+  }
 
   private setConfigViaEnvironmentVariables() {
     const envHassServer = process.env.HASS_SERVER;
     const envHassToken = process.env.HASS_TOKEN;
     const envSupervisorToken = process.env.SUPERVISOR_TOKEN;
     
+    const envDevMock = process.env.HASS_DEV_MOCK;
+
     console.log("Checking environment variables for configuration:");
     console.log(`- HASS_SERVER: ${envHassServer ? "Present" : "Not present"}`);
     console.log(`- HASS_TOKEN: ${envHassToken ? "Present" : "Not present"}`);
     console.log(`- SUPERVISOR_TOKEN: ${envSupervisorToken ? "Present" : "Not present"}`);
+    console.log(`- HASS_DEV_MOCK: ${envDevMock ? "Present" : "Not present"}`);
+
+    if (envDevMock === "1" || envDevMock === "true") {
+      this.devMockConnection = true;
+      console.log("Dev mock connection enabled via HASS_DEV_MOCK env var");
+    }
     
     // Set URL from environment if needed
     if (!this.url && envHassServer) {

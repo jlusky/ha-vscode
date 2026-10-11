@@ -6,6 +6,13 @@ homeassistant:
   elevation: 0
   unit_system: metric
   time_zone: UTC
+  # Schema-validation fixtures only (not area/device/entity registry fixtures).
+  # Package files keep domain keys at the root and receive the configuration schema.
+  packages:
+    invalid_automation: !include test-invalid-automation.yaml
+    schema_validation: !include test-schema-validation.yaml
+    sensor_validation: !include test-sensor-validation.yaml
+    script_validation: !include test-script-validation.yaml
 
 # Include our test files
 include:

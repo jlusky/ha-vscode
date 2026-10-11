@@ -1,6 +1,7 @@
 import * as assert from "assert";
 import { HomeAssistantLanguageService } from "../../language-service/src/haLanguageService";
-import { TextDocument, CompletionItem } from "vscode-languageserver-protocol";
+import { CompletionItem } from "vscode-languageserver-protocol";
+import { TextDocument } from "vscode-languageserver-textdocument";
 import { IHaConnection } from "../../language-service/src/home-assistant/haConnection";
 import { HassEntities } from "home-assistant-js-websocket";
 import { HomeAssistantConfiguration } from "../../language-service/src/haConfig/haConfig";
