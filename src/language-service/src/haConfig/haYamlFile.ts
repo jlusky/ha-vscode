@@ -201,14 +201,13 @@ export class HomeAssistantYamlFile {
   };
 
   private async collectInclude(x: Scalar, currentPath: string) {
-    let value: null | boolean | number | string = "";
     const includeType = this.getIncludeType(`${x.tag}`.slice(1).toLowerCase());
     if (includeType === null) {
       // secrets and other tags
       return;
     }
 
-    value = x.value.toString().replace(/\\/g, "/"); // \ to / on windows
+    const value: null | boolean | number | string = x.value.toString().replace(/\\/g, "/"); // \ to / on windows
 
     let files: string[] = [];
 

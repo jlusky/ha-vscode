@@ -11,7 +11,11 @@
     "esModuleInterop": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    // Keep TypeScript 5 defaults; TS 6 enables strict and drops node10 resolution by default
+    "strict": false,
+    "moduleResolution": "node10",
+    "ignoreDeprecations": "6.0"
   },
   "include": ["src/**/*.ts", "src/**/*.json"],
   "exclude": ["node_modules", ".vscode-test", "server"]

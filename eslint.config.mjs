@@ -34,6 +34,9 @@ export default tseslint.config(
     languageOptions: {
       ecmaVersion: 2020,
       sourceType: "module",
+      parserOptions: {
+        tsconfigRootDir: __dirname,
+      },
     },
     rules: {
       // Base rules

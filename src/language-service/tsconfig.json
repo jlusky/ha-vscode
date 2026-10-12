@@ -13,7 +13,12 @@
     "noUnusedLocals": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    // Keep TypeScript 5 defaults; TS 6 enables strict, drops node10 resolution, and no longer auto-includes @types
+    "strict": false,
+    "types": ["node"],
+    "moduleResolution": "node10",
+    "ignoreDeprecations": "6.0"
   },
   "include": ["src/**/*.ts", "src/**/*.json"]
 }
