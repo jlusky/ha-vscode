@@ -5,7 +5,7 @@ https://github.com/home-assistant/home-assistant-js-websocket/blob/master/lib/so
 
 */
 
-import type { Auth } from "home-assistant-js-websocket/dist/auth";
+import type { Auth } from "home-assistant-js-websocket";
 
 import WebSocket from "ws";
 

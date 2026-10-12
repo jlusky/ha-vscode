@@ -56,11 +56,8 @@ async function setToken(context: vscode.ExtensionContext): Promise<void> {
       (process.env.SUPERVISOR_TOKEN ? "http://supervisor/core" : "");
   }
   
-  // Ask for instance URL if not already configured
-  let instanceUrl = currentUrl;
-  
   // Always ask for the instance URL for verification
-  instanceUrl = await vscode.window.showInputBox({
+  const instanceUrl = await vscode.window.showInputBox({
     prompt: "Enter your Home Assistant instance URL",
     placeHolder: "http://homeassistant.local:8123",
     value: currentUrl || "http://homeassistant.local:8123", // Pre-fill default if currentUrl is empty

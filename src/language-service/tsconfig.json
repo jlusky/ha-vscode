@@ -13,7 +13,12 @@
     "noUnusedLocals": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    // TS 6 enables strict and no longer auto-includes @types by default
+    "strict": false,
+    "types": ["node"],
+    // Honour package "exports" (vscode-languageserver-protocol 3.18 ships types only there)
+    "moduleResolution": "bundler"
   },
   "include": ["src/**/*.ts", "src/**/*.json"]
 }

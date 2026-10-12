@@ -2759,12 +2759,10 @@ export class HomeAssistantLanguageService {
     while (currentLine >= 0) {
       const lineOffsets: number[] = getLineOffsets(document.getText());
       const start: number = lineOffsets[currentLine];
-      let end = 0;
-      if (lineOffsets[currentLine + 1] !== undefined) {
-        end = lineOffsets[currentLine + 1] - 1;
-      } else {
-        end = document.getText().length;
-      }
+      const end =
+        lineOffsets[currentLine + 1] !== undefined
+          ? lineOffsets[currentLine + 1] - 1
+          : document.getText().length;
       const thisLine = document.getText().substring(start, end);
 
       const isOtherItemInList = thisLine.match(

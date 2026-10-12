@@ -7,6 +7,10 @@ updates:
       time: "04:00"
     open-pull-requests-limit: 10
     target-branch: dev
+    ignore:
+      # typescript-eslint 8.x peer range is TypeScript <6.1.0; tsconfig relies on TS 6 deprecation opt-outs
+      - dependency-name: typescript
+        versions: [">=6.1.0"]
   - package-ecosystem: npm
     directory: "/src/language-service"
     schedule:
@@ -14,6 +18,10 @@ updates:
       time: "04:00"
     open-pull-requests-limit: 10
     target-branch: dev
+    ignore:
+      # Keep in sync with the root TypeScript version, which builds this package
+      - dependency-name: typescript
+        versions: [">=6.1.0"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
