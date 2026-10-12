@@ -100,7 +100,8 @@ export async function activate(
           "vscode-home-assistant": {
             longLivedAccessToken: token || "",
             hostUrl: url || config.get<string>("hostUrl") || "",
-            ignoreCertificates: !!config.get<boolean>("ignoreCertificates")
+            ignoreCertificates: !!config.get<boolean>("ignoreCertificates"),
+            devMockConnection: !!config.get<boolean>("devMockConnection"),
           }
         };
       } catch (error) {
@@ -164,6 +165,11 @@ export async function activate(
   // Register all notification handlers and add them to subscriptions to prevent memory leaks
   context.subscriptions.push(
     client.onNotification("no-config", async (): Promise<void> => {
+      const config = vscode.workspace.getConfiguration("vscode-home-assistant");
+      if (config.get<boolean>("devMockConnection")) {
+        console.log("'no-config' notification ignored because devMockConnection is enabled.");
+        return;
+      }
       if (await AuthManager.hasCredentials(context)) {
         console.log("'no-config' notification received from server, but credentials (token and/or Home Assistant instance URL) found in SecretStorage. Ignoring pop-up.");
         return;

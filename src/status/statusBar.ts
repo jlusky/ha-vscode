@@ -55,6 +55,14 @@ export class HomeAssistantStatusBar {
     try {
       this.checkInProgress = true;
       
+      // Get config to check if we should ignore certificates / use mock mode
+      const config = vscode.workspace.getConfiguration("vscode-home-assistant");
+      if (config.get<boolean>("devMockConnection")) {
+        this.instanceName = "Dev Mock HA";
+        this.updateStatus("connected");
+        return;
+      }
+
       // Get token and URL from SecretStorage
       const token = await AuthManager.getToken(this.context);
       const url = await AuthManager.getUrl(this.context);
@@ -65,8 +73,6 @@ export class HomeAssistantStatusBar {
         return;
       }
 
-      // Get config to check if we should ignore certificates
-      const config = vscode.workspace.getConfiguration("vscode-home-assistant");
       const ignoreCertificates = !!config.get<boolean>("ignoreCertificates");
       
       // Test connection to Home Assistant

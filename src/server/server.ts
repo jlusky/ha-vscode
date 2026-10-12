@@ -52,6 +52,11 @@ connection.onInitialize(async (params) => {
     } else {
       console.log("No Home Assistant instance URL provided in initialization options");
     }
+
+    if (haConfig.devMockConnection) {
+      console.log("Dev mock connection enabled via initialization options");
+      process.env.HASS_DEV_MOCK = "1";
+    }
   } else {
     console.log("No Home Assistant configuration in initialization options");
   }
@@ -114,12 +119,28 @@ connection.onInitialize(async (params) => {
   haConnection.onConnectionEstablished = (info) => {
     console.log("Home Assistant connection established, notifying client");
     connection.sendNotification("ha_connected", info);
+    // Re-validate open documents now that registry data is available
+    void (async () => {
+      for (const d of documents.all()) {
+        try {
+          const diagnostics =
+            await homeAsisstantLanguageService.getDiagnostics(d);
+          sendDiagnostics(d.uri, diagnostics);
+        } catch (error) {
+          console.error(`Failed to refresh diagnostics for ${d.uri}: ${error}`);
+        }
+      }
+    })();
   };
   
   haConnection.onConnectionFailed = (error) => {
     console.log("Home Assistant connection failed, notifying client");
     connection.sendNotification("ha_connection_error", { error: error || "Unknown error" });
   };
+
+  if (configurationService.devMockConnection) {
+    void haConnection.tryConnect();
+  }
 
   documents.onDidChangeContent((e) =>
     homeAsisstantLanguageService.onDocumentChange(e.document),
