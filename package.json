@@ -763,7 +763,7 @@
     "@vscode/extension-telemetry": "^1.5.2",
     "axios": "^1.20.0",
     "bufferutil": "^4.0.9",
-    "home-assistant-js-websocket": "^9.6.0",
+    "home-assistant-js-websocket": "^9.7.1",
     "utf-8-validate": "^6.0.5",
     "uuid": "^14.0.2",
     "vscode-json-languageservice": "^5.7.2",
