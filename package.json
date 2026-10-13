@@ -740,7 +740,7 @@
     "@types/request": "2.48.13",
     "@types/uuid": "^11.0.0",
     "@types/vscode": "^1.99.0",
-    "@types/ws": "8.18.1",
+    "@types/ws": "8.18.2",
     "@typescript-eslint/eslint-plugin": "^8.71.1",
     "@typescript-eslint/parser": "^8.71.1",
     "@vscode/test-cli": "^0.0.12",
@@ -772,7 +772,7 @@
     "vscode-languageserver-protocol": "3.17.5",
     "vscode-languageserver-textdocument": "^1.0.15",
     "vscode-uri": "3.2.0",
-    "ws": "8.18.3",
+    "ws": "8.22.0",
     "yaml": "2.8.3",
     "yaml-language-server": "1.25.0"
   }
