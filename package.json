@@ -736,7 +736,7 @@
     "@eslint/js": "^10.0.1",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@types/mocha": "^10.0.10",
-    "@types/node": "24.10.1",
+    "@types/node": "26.6.5",
     "@types/request": "2.48.13",
     "@types/uuid": "^11.0.0",
     "@types/vscode": "^1.99.0",
