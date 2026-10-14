@@ -739,7 +739,7 @@
     "@types/node": "24.10.1",
     "@types/request": "2.48.13",
     "@types/uuid": "^11.0.0",
-    "@types/vscode": "^1.99.0",
+    "@types/vscode": "^1.140.0",
     "@types/ws": "8.18.2",
     "@typescript-eslint/eslint-plugin": "^8.71.1",
     "@typescript-eslint/parser": "^8.71.1",
