@@ -1,6 +1,6 @@
 <h1 align="center">
 
-<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/header.png" alt="Home Assistant Config Helper for Visual Studio Code"/>
+<img src="https://raw.githubusercontent.com/jlusky/vscode-ha-config/dev/assets/header.png" alt="Home Assistant Config Helper for Visual Studio Code"/>
 
 </h1>
 
@@ -29,33 +29,33 @@
 
 When connected with your Home Assistant server, entity IDs and actions will be auto-completed.
 
-<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/entity_service_completion.gif">
+<img src="https://raw.githubusercontent.com/jlusky/vscode-ha-config/dev/assets/entity_service_completion.gif">
 
 ## Completion & Validation for Configuration & Lovelace Schema
 
 Most of the scheme's of Home Assistant will be validated and things like properties, values and enums will be auto-completed. This extension understands the behaviour of Home Assistant '!include...' behaviour and use this to provide scoped validation for all your files.
 
-<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/schema_validation_completion.gif">
+<img src="https://raw.githubusercontent.com/jlusky/vscode-ha-config/dev/assets/schema_validation_completion.gif">
 
 Deprecation Warnings:
 
-<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/deprecation-warnings.png">
+<img src="https://raw.githubusercontent.com/jlusky/vscode-ha-config/dev/assets/deprecation-warnings.png">
 
 Schema Documentation
 
-<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/schema-documentation.png">
+<img src="https://raw.githubusercontent.com/jlusky/vscode-ha-config/dev/assets/schema-documentation.png">
 
 ## Go to Definition for Includes
 
 Easy navigate between your files references via the different !include... tags using 'f12' / 'Go to Definition'.
 
-<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/go_to_definition.gif">
+<img src="https://raw.githubusercontent.com/jlusky/vscode-ha-config/dev/assets/go_to_definition.gif">
 
 ## Snippets
 
 Snippets allow you to create commonly used data structures very quickly.
 
-<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/snippet.gif">
+<img src="https://raw.githubusercontent.com/jlusky/vscode-ha-config/dev/assets/snippet.gif">
 
 ## Commands
 
@@ -74,11 +74,11 @@ Evaluate jinja templates via Home Assistant's API and see how they would render.
 
 # Release Notes
 
-Read all the recent changes in the [GitHub releases section](https://github.com/keesschollaart81/vscode-home-assistant/releases)
+Read all the recent changes in the [GitHub releases section](https://github.com/jlusky/vscode-ha-config/releases)
 
 # Feedback / Ideas
 
-Create an [issue](https://github.com/keesschollaart81/vscode-home-assistant/issues/new/choose), reach out to me on [Twitter](https://twitter.com/keesschollaart) or the [Home Assistant Discord](https://discord.gg/c5DvZ4e).
+Create an [issue](https://github.com/jlusky/vscode-ha-config/issues/new/choose), reach out to me on [Twitter](https://twitter.com/keesschollaart) or the [Home Assistant Discord](https://discord.gg/c5DvZ4e).
 
 # Things to do / up for grabs
 

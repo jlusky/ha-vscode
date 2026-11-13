@@ -5,7 +5,7 @@ import * as path from "path";
 suite("Extension Test Suite", () => {
   suiteSetup(async () => {
     // Activate the extension
-    await vscode.extensions.getExtension("keesschollaart.vscode-home-assistant")?.activate();
+    await vscode.extensions.getExtension("keesschollaart.vscode-ha-config")?.activate();
     
     // Show a message to indicate tests are starting
     vscode.window.showInformationMessage("Starting Home Assistant extension tests...");
@@ -16,7 +16,7 @@ suite("Extension Test Suite", () => {
   });
 
   test("Extension is activated", async () => {
-    const extension = vscode.extensions.getExtension("keesschollaart.vscode-home-assistant");
+    const extension = vscode.extensions.getExtension("keesschollaart.vscode-ha-config");
     assert.ok(extension, "Extension is installed");
     assert.strictEqual(extension?.isActive, true, "Extension is active");
   });
