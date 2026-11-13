@@ -71,7 +71,7 @@ jobs:
         run: |
           npm install -g @vscode/vsce
           vsce publish -p $VSCE_TOKEN
-          vsce package -o vscode-home-assistant.vsix
+          vsce package -o vscode-ha-config.vsix
         env:
           VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
 
@@ -79,5 +79,5 @@ jobs:
         uses: HaaLeo/publish-vscode-extension@v2
         with:
           pat: ${{ secrets.OPEN_VSX_TOKEN }}
-          extensionFile: vscode-home-assistant.vsix
+          extensionFile: vscode-ha-config.vsix
           registryUrl: https://open-vsx.org

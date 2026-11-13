@@ -5,7 +5,7 @@ import * as vscode from "vscode";
 suite("Condition Selector Issue #2786", () => {
   suiteSetup(async () => {
     // Activate the extension
-    await vscode.extensions.getExtension("keesschollaart.vscode-home-assistant")?.activate();
+    await vscode.extensions.getExtension("keesschollaart.vscode-ha-config")?.activate();
 
     vscode.window.showInformationMessage("Starting condition selector issue #2786 tests...");
   });
