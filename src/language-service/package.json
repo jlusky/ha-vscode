@@ -35,7 +35,7 @@
   "devDependencies": {
     "@types/mocha": "10.0.10",
     "@types/node": "24.19.2",
-    "@types/vscode": "1.145.0",
+    "@types/vscode": "1.146.0",
     "@types/ws": "8.18.2",
     "@types/yaml": "1.9.7",
     "rimraf": "6.1.4",
