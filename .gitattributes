@@ -1,1 +1,2 @@
 .husky/* text eol=lf
+test-workspace/*.yaml text eol=lf
