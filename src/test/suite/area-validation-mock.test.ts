@@ -1,4 +1,5 @@
 import * as assert from "assert";
+import { diagnosticText } from "./diagnosticHelpers";
 import { TextDocument } from "vscode-languageserver-textdocument";
 import { CompletionItem, CompletionItemKind, MarkupContent } from "vscode-languageserver-protocol";
 import { IHaConnection } from "../../language-service/src/home-assistant/haConnection";
@@ -213,7 +214,7 @@ group:
     ];
 
     const foundUnknownAreas = areaDiagnostics.map(d => {
-      const match = d.message.match(/Area '([^']+)'/);
+      const match = diagnosticText(d).match(/Area '([^']+)'/);
       return match ? match[1] : null;
     }).filter(e => e !== null);
 
@@ -284,7 +285,7 @@ automation:
     assert.strictEqual(areaDiagnostics.length, 1, 
       "Should only flag unknown areas, not templates or special values");
 
-    const foundArea = areaDiagnostics[0].message.match(/Area '([^']+)'/)?.[1];
+    const foundArea = diagnosticText(areaDiagnostics[0]).match(/Area '([^']+)'/)?.[1];
     assert.strictEqual(foundArea, "unknown_area", 
       "Should flag the unknown area");
   });
@@ -333,7 +334,7 @@ automation:
 
     // Verify that the line with living_room (valid area) doesn't generate diagnostics
     const allDiagnostics = diagnostics.filter(d => d.source === "home-assistant");
-    const livingRoomDiagnostic = allDiagnostics.find(d => d.message.includes("living_room"));
+    const livingRoomDiagnostic = allDiagnostics.find(d => diagnosticText(d).includes("living_room"));
     assert.ok(!livingRoomDiagnostic, "Should not flag valid areas");
   });
 });

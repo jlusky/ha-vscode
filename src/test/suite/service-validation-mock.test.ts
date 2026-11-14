@@ -1,4 +1,5 @@
 import * as assert from "assert";
+import { diagnosticText } from "./diagnosticHelpers";
 import { HomeAssistantLanguageService } from "../../language-service/src/haLanguageService";
 import { CompletionItem, CompletionItemKind, MarkupContent } from "vscode-languageserver-protocol";
 import { TextDocument } from "vscode-languageserver-textdocument";
@@ -280,7 +281,7 @@ group:
     // We should have exactly 2 unknown action diagnostics (not including the one in group: section)
     assert.strictEqual(actionDiagnostics.length, 2, 
       `Expected 2 unknown action diagnostics, got ${actionDiagnostics.length}. ` +
-      `The third one (unknown.service) should be ignored because it's not in an automation/script context.`);
+      "The third one (unknown.service) should be ignored because it's not in an automation/script context.");
 
     // Check that the diagnostics are for the correct actions
     const expectedUnknownActions = [
@@ -290,7 +291,7 @@ group:
     ];
 
     const foundUnknownActions = actionDiagnostics.map(d => {
-      const match = d.message.match(/Action '([^']+)'/);
+      const match = diagnosticText(d).match(/Action '([^']+)'/);
       return match ? match[1] : null;
     }).filter(s => s !== null);
 
@@ -348,7 +349,7 @@ automation:
     assert.strictEqual(actionDiagnostics.length, 1, 
       "Should only flag unknown actions, not templates or secrets");
 
-    const foundAction = actionDiagnostics[0].message.match(/Action '([^']+)'/)?.[1];
+    const foundAction = diagnosticText(actionDiagnostics[0]).match(/Action '([^']+)'/)?.[1];
     assert.strictEqual(foundAction, "light.unknown_service", 
       "Should flag the unknown action");
   });
@@ -390,7 +391,7 @@ automation:
     assert.strictEqual(actionDiagnostics.length, 1,
       "Should only flag valid format unknown actions");
 
-    const foundAction = actionDiagnostics[0].message.match(/Action '([^']+)'/)?.[1];
+    const foundAction = diagnosticText(actionDiagnostics[0]).match(/Action '([^']+)'/)?.[1];
     assert.strictEqual(foundAction, "light.valid_but_unknown",
       "Should flag the valid but unknown action");
   });
