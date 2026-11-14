@@ -14,6 +14,10 @@ updates:
       # Stay on Node 24.x type definitions; ignore @types/node 25+
       - dependency-name: "@types/node"
         versions: [">=25.0.0"]
+      # 2.x is ESM-only, needs Node >=22.13 and moved the out/server/src paths we import;
+      # upgrade deliberately in its own PR
+      - dependency-name: yaml-language-server
+        versions: [">=2.0.0"]
   - package-ecosystem: npm
     directory: "/src/language-service"
     schedule:
@@ -28,6 +32,9 @@ updates:
       # Keep in sync with the root @types/node version (Node 24.x)
       - dependency-name: "@types/node"
         versions: [">=25.0.0"]
+      # Keep in sync with the root yaml-language-server version (see the note there)
+      - dependency-name: yaml-language-server
+        versions: [">=2.0.0"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
