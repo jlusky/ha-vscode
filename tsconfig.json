@@ -12,10 +12,11 @@
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "noImplicitAny": true,
-    // Keep TypeScript 5 defaults; TS 6 enables strict and drops node10 resolution by default
+    // Keep TypeScript 5 defaults; TS 6 enables strict by default
     "strict": false,
-    "moduleResolution": "node10",
-    "ignoreDeprecations": "6.0"
+    // Honour package "exports" (vscode-languageclient/-server 10+ and
+    // vscode-languageserver-protocol 3.18 ship types only there); matches src/language-service
+    "moduleResolution": "bundler"
   },
   "include": ["src/**/*.ts", "src/**/*.json"],
   "exclude": ["node_modules", ".vscode-test", "server"]

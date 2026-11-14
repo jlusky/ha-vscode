@@ -1,4 +1,5 @@
 import * as assert from "assert";
+import { diagnosticText } from "./diagnosticHelpers";
 import { HomeAssistantLanguageService } from "../../language-service/src/haLanguageService";
 import { CompletionItem } from "vscode-languageserver-protocol";
 import { TextDocument } from "vscode-languageserver-textdocument";
@@ -212,7 +213,7 @@ group:
     ];
 
     const foundUnknownEntities = entityDiagnostics.map(d => {
-      const match = d.message.match(/Entity '([^']+)'/);
+      const match = diagnosticText(d).match(/Entity '([^']+)'/);
       return match ? match[1] : null;
     }).filter(e => e !== null);
 
@@ -269,7 +270,7 @@ automation:
     assert.strictEqual(entityDiagnostics.length, 1, 
       "Should only flag unknown entities, not templates or secrets");
 
-    const foundEntity = entityDiagnostics[0].message.match(/Entity '([^']+)'/)?.[1];
+    const foundEntity = diagnosticText(entityDiagnostics[0]).match(/Entity '([^']+)'/)?.[1];
     assert.strictEqual(foundEntity, "light.unknown_entity", 
       "Should flag the unknown entity");
   });
@@ -309,7 +310,7 @@ automation:
     assert.strictEqual(entityDiagnostics.length, 1,
       "Should only flag valid format unknown entities");
 
-    const foundEntity = entityDiagnostics[0].message.match(/Entity '([^']+)'/)?.[1];
+    const foundEntity = diagnosticText(entityDiagnostics[0]).match(/Entity '([^']+)'/)?.[1];
     assert.strictEqual(foundEntity, "light.valid_but_unknown",
       "Should flag the valid but unknown entity");
   });

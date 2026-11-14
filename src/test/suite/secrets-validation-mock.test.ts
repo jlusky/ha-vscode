@@ -1,4 +1,5 @@
 import * as assert from "assert";
+import { diagnosticText } from "./diagnosticHelpers";
 import { HomeAssistantLanguageService } from "../../language-service/src/haLanguageService";
 import { CompletionItem } from "vscode-languageserver-protocol";
 import { TextDocument } from "vscode-languageserver-textdocument";
@@ -185,7 +186,7 @@ script:
     ];
 
     const foundUnknownSecrets = secretsDiagnostics.map(d => {
-      const match = d.message.match(/Secret '([^']+)'/);
+      const match = diagnosticText(d).match(/Secret '([^']+)'/);
       return match ? match[1] : null;
     }).filter(s => s !== null);
 
@@ -247,7 +248,7 @@ automation:
     assert.strictEqual(secretsDiagnostics.length, 1, 
       "Should only flag unknown secrets, not templates");
 
-    const foundSecret = secretsDiagnostics[0].message.match(/Secret '([^']+)'/)?.[1];
+    const foundSecret = diagnosticText(secretsDiagnostics[0]).match(/Secret '([^']+)'/)?.[1];
     assert.strictEqual(foundSecret, "nonexistent_secret", 
       "Should flag the unknown secret");
   });
@@ -291,7 +292,7 @@ automation:
     assert.strictEqual(secretsDiagnostics.length, 1,
       "Should only flag valid format unknown secrets");
 
-    const foundSecret = secretsDiagnostics[0].message.match(/Secret '([^']+)'/)?.[1];
+    const foundSecret = diagnosticText(secretsDiagnostics[0]).match(/Secret '([^']+)'/)?.[1];
     assert.strictEqual(foundSecret, "valid_but_unknown",
       "Should flag the valid but unknown secret");
   });
