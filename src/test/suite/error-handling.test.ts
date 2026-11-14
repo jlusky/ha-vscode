@@ -218,8 +218,9 @@ script:
     const endTime = process.hrtime.bigint();
     const duration = Number(endTime - startTime) / 1_000_000; // Convert to milliseconds
     
-    // Verify it waited for the file
-    assert.ok(duration >= 1500, "Should have waited for delayed file access");
+    // Verify it waited for the file. Allow some slack: Node timers can fire slightly
+    // early relative to process.hrtime, which made an exact >= 1500 check flaky in CI.
+    assert.ok(duration >= 1450, `Should have waited for delayed file access (took ${duration.toFixed(1)}ms)`);
     assert.ok(Object.keys(scripts).includes("test_script"), "Should still parse scripts from delayed file");
   });
   
